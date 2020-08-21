@@ -12,14 +12,17 @@ public class TicTacToe extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        FlowPane pane = new FlowPane();
+        FlowPane flow = new FlowPane();
+        flow.setVgap(9);
+        flow.setHgap(3);
         for (int i=1; i<=9; i++){
             Button button =new Button("Click me");
-            pane.getChildren().add(button);
+            button.setPrefHeight(120);
+            button.setPrefWidth(120);
+            flow.getChildren().add(button);
         }
 
-
-        Scene scene = new Scene(pane, 500, 500);
+        Scene scene = new Scene(flow, 450, 500);
         primaryStage.setTitle("Tic Tac Toe");
 
         primaryStage.setScene(scene);
