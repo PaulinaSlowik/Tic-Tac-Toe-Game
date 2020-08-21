@@ -1,17 +1,14 @@
 package com.kodilla;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
-
-public class TicTacToe extends Application {
-
-    int counter =0;
+public class ExampleWithImage  extends Application {
 
     @Override
     public void start(Stage primaryStage) {
@@ -23,21 +20,11 @@ public class TicTacToe extends Application {
             Button button =new Button("");
             button.setPrefHeight(120);
             button.setPrefWidth(120);
-
-            button.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent e) {
-                    //jeżeli counter będzie liczbą parzystą
-                    if (counter %2 ==0){
-                        button.setText("X");
-                    }
-                    else{
-                        button.setText("O");
-                    }
-                    counter++;
-                    //button.setText("Accepted");
-                    //System.out.println("Kliknięto mnie");
-                }
+            //dodawanie zdjecia do przycisków oraz informacja w konsoli że kliknięto w przycisk
+            Image image = new Image("file:src/main/resources/question-mark.png");
+            button.setGraphic(new ImageView(image));
+            button.setOnAction(event -> {
+                        System.out.println("Kliknięto mnie");
             });
             flow.getChildren().add(button);
         }
@@ -55,4 +42,5 @@ public class TicTacToe extends Application {
 
     }
 }
+
 
