@@ -64,6 +64,9 @@ public class Game {
             }
         }
 /*
+
+
+
         //8 możliwości wygranej gry
         if      ((positions[0]!=empty)&&(positions[0]==positions[1])&&(positions[1]==positions[2]) ||
                 ((positions[3]!=empty)&&(positions[3]==positions[4])&&(positions[4]==positions[5]) ||

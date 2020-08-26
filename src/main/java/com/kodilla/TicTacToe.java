@@ -12,7 +12,8 @@ import javafx.scene.text.Font;
 public class TicTacToe extends Application {
 
     private static Game game;
-    //public static Button reset;
+    public static Button reset;
+    private FlowPane flow = new FlowPane();
 
     public static void main(String[] args) {
         launch(args);
@@ -26,7 +27,7 @@ public class TicTacToe extends Application {
         //reset.setTranslateY(350);
         //reset.setFont(new Font("Arial", 15));
 
-        FlowPane flow = new FlowPane();
+        //FlowPane flow = new FlowPane();
         flow.setAlignment(Pos.CENTER);
 
         //flow.getChildren().add(reset);
