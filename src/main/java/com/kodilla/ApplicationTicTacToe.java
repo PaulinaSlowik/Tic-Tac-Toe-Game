@@ -1,6 +1,5 @@
 package com.kodilla;
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -9,6 +8,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class ApplicationTicTacToe extends Application {
 
@@ -140,7 +142,23 @@ public class ApplicationTicTacToe extends Application {
             }
         }
     }
-    public class Computer{
+    public static class ComputersLogic {
 
+        private final ApplicationTicTacToe state;
+        private final Random random = new Random();
+
+        public ComputersLogic(ApplicationTicTacToe state) {
+            this.state = state;
+        }
+
+        public int getComputerTurn() {
+            List<Integer> freeFields = new ArrayList<>();
+            for (int i = 1; i <= 9; i++) {
+                if (!state.isBoardFull()) {
+                    freeFields.add(i);
+                }
+            }
+            return freeFields.get(random.nextInt(freeFields.size()));
+        }
     }
 }
