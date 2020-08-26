@@ -17,8 +17,8 @@ public class TicTacToe extends Application {
     public void start(Stage primaryStage) {
 
         FlowPane flow = new FlowPane();
-        flow.setVgap(9);
-        flow.setHgap(9);
+        //flow.setVgap(9);
+        //flow.setHgap(9);
         for (int i=1; i<=9; i++){
             Button button =new Button("");
             button.setPrefHeight(120);
@@ -29,17 +29,32 @@ public class TicTacToe extends Application {
                 public void handle(ActionEvent e) {
                     //jeżeli counter będzie liczbą parzystą
                     if (counter %2 ==0){
+                        //Buttons.CROSS
                         button.setText("X");
                     }
                     else{
                         button.setText("O");
                     }
+                    button.setDisable(true);
                     counter++;
                     //button.setText("Accepted");
                     //System.out.println("Kliknięto mnie");
                 }
             });
             flow.getChildren().add(button);
+
+            //8 możliwości wygranej gry
+            if      ((positions[0]!=empty)&&(positions[0]==positions[1])&&(positions[1]==positions[2]) ||
+                    ((positions[3]!=empty)&&(positions[3]==positions[4])&&(positions[4]==positions[5]) ||
+                    ((positions[6]!=empty)&&(positions[6]==positions[7])&&(positions[7]==positions[8]) ||
+                    ((positions[0]!=empty)&&(positions[0]==positions[3])&&(positions[3]==positions[6]) ||
+                    ((positions[1]!=empty)&&(positions[1]==positions[4])&&(positions[4]==positions[7]) ||
+                    ((positions[2]!=empty)&&(positions[2]==positions[5])&&(positions[5]==positions[8]) ||
+                    ((positions[0]!=empty)&&(positions[0]==positions[4])&&(positions[4]==positions[8]) ||
+                    ((positions[2]!=empty)&&(positions[2]==positions[4])&&(positions[4]==positions[6])
+                    {
+                System.out.println("Win!");
+            }
         }
 
         Scene scene = new Scene(flow, 450, 500);
