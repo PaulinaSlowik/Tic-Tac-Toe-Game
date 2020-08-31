@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ApplicationTicTacToe extends Application {
+public class TicTacToe extends Application {
 
     private char currentPlayer = 'X';
     private final Cell[][] cell = new Cell[3][3];
@@ -130,7 +130,7 @@ public class ApplicationTicTacToe extends Application {
             }
         }
     }
-    /*getComputerTurn w osobnej klasie
+    /*ewentualnie getComputerTurn w osobnej klasie
     public static class ComputersLogic {
 
         private final ApplicationTicTacToe state;
