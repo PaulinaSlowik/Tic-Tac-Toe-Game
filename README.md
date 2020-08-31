@@ -6,8 +6,6 @@
 * [Screenshots](#screenshots)
 * [Technologies](#technologies)
 * [Status](#status)
-* [Inspiration](#inspiration)
-* [Contact](#contact)
 
 ## General info
 >Game description and the course of the game:
