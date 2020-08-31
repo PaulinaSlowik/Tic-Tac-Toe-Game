@@ -10,7 +10,7 @@
 * [Contact](#contact)
 
 ##General info
-Game description and the course of the game:
+>Game description and the course of the game:
 1. The game is played by two players (a human plays "with the computer").
 2. The playing area is marked with 4 intersecting lines: two vertical and two horizontal, each of which is divided into three equal parts by two lines perpendicular to it.
 3. One player draws only a circle in the fields, the other only a cross.
