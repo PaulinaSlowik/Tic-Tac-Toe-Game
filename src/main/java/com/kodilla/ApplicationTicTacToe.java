@@ -17,11 +17,14 @@ public class ApplicationTicTacToe extends Application {
     private char currentPlayer = 'X';
     private final Cell[][] cell = new Cell[3][3];
     private final Label statusMessage = new Label("X must play");
+    private final Random random = new Random();
+    List<Integer> freeFields = new ArrayList<>();
+
 
     @Override
     public void start (Stage primaryStage) throws Exception {
         GridPane pane = new GridPane(); //do wyświetlenia komórek
-        for (int i =0; i<3; i++) { //ustawiamy komórki (cell) w pane w ustalonych pozycjach
+        for (int i =0; i<3; i++) { //ustawiam komórki (cell) w pane w ustalonych pozycjach
             for (int j=0; j<3; j++) {
                 cell[i][j] = new Cell();
                 pane.add(cell[i][j],j,i);
@@ -33,7 +36,7 @@ public class ApplicationTicTacToe extends Application {
         borderPane.setBottom(statusMessage);
 
         Scene scene = new Scene(borderPane, 450, 300);
-        primaryStage.setTitle("Tc Tac Toe Game");
+        primaryStage.setTitle("Tic Tac Toe Game");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -69,30 +72,6 @@ public class ApplicationTicTacToe extends Application {
         return false;
     }
 
-    /*
-     * Metoda zwracająca pole, które jest zwycięskie dla danego gracza
-     *
-     * Metoda pobiera jeden argument - obiekt typu Gracz (może to być np. Komputer lub Człowiek)
-     * Metoda zwraca liczbę określającą pole, które gracz powinien zakreślić żeby wygrać pojedynek
-     * Jeśli metoda zwróci liczbę od 0 do 8 to oznacza to, że istnieje zwycięski ruch dzięki któremu
-     * gracz może wygrać w tym ruchu pojedynek. Jeśli natomiast metoda zwróci liczbę -1 to oznacza to, że
-     * nie istnieje w tym momencie możliwość zwycięskiego zakończenia pojedynku przez gracza.
-     */
-	/*public int podajZwycieskiRuch(char player){
-
-        for (int i = 0; i < 3; i++) {
-            if (cell[i][0].getPlayer() == player && cell[i][1].getPlayer() == player && cell[i][2].getPlayer() == player) {
-                return cell[i][2].getPlayer();
-            }
-            else if (cell[i][0].getPlayer() == player && cell[i][1].getPlayer() == ' ' && cell[i][2].getPlayer() == player) {
-                return cell[i][1].getPlayer();
-            }
-            else if (cell[i][0].getPlayer() == ' ' && cell[i][1].getPlayer() == player && cell[i][2].getPlayer() == player) {
-                return cell[i][0].getPlayer();
-            }
-        return -1; //komputer nie ma mozliwosci wygrania w nastepnej rundzie
-	}*/
-
     public class Cell extends Pane {
         private char player = ' ' ;
 
@@ -119,6 +98,14 @@ public class ApplicationTicTacToe extends Application {
             }
         }
 
+        public int getComputerTurn() {
+            for (int i = 1; i <= 9; i++) {
+                if (!isBoardFull()) {
+                    freeFields.add(i);
+                }
+            }
+            return freeFields.get(random.nextInt(freeFields.size()));
+        }
 
         public char getPlayer() {
             return player;
@@ -126,7 +113,8 @@ public class ApplicationTicTacToe extends Application {
         public void setPlayer(char c) {
             player =c;
             if (player == 'X') {
-                /*Image cross = new Image("file:src/main/resources/cross.png");
+                /*inny sposób
+                Image cross = new Image("file:src/main/resources/cross.png");
                 ImageView imageView = new ImageView();
                 imageView.setImage(cross);
                 imageView.setPreserveRatio(true);
@@ -142,6 +130,7 @@ public class ApplicationTicTacToe extends Application {
             }
         }
     }
+    /*getComputerTurn w osobnej klasie
     public static class ComputersLogic {
 
         private final ApplicationTicTacToe state;
@@ -160,5 +149,10 @@ public class ApplicationTicTacToe extends Application {
             }
             return freeFields.get(random.nextInt(freeFields.size()));
         }
-    }
+    }*/
+
+    // myślałam aby wrzucić to w this.setOnMouseClicked(event -> handleClick()); a dokłądnie w metodę handleClick,
+    // tzn. jak ktos kliknie myszką w pole to po nacisnieciu przycisku na samym koncu można wywolac metode
+    // a metoda getComputerTurn losuje sobie pole (randamowo w zależności jaką sobie liczbe wylosowal komputer) i tam ustawia znak O
+
 }
