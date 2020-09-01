@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -20,16 +21,31 @@ public class TicTacToe extends Application {
     private final Random random = new Random();
     List<Integer> freeFields = new ArrayList<>();
 
+    public char getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+//    public char setCurrentPlayer(char player) {
+//        return currentPlayer = player;
+//    }
+
+    public void changeCurrentPlayer() {
+        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+        statusMessage.setText(currentPlayer + " must play");
+    }
 
     @Override
     public void start (Stage primaryStage) throws Exception {
         GridPane pane = new GridPane(); //do wyświetlenia komórek
         for (int i =0; i<9; i++) { //ustawiam komórki (cell) w pane w ustalonych pozycjach
-                gameBoard[i] = new Cell();
+                gameBoard[i] = new Cell(i);
                 int column = getGameBoardColumnIndex(i);
                 int row = getGameBoardRowIndex(i);
                 pane.add(gameBoard[i], column, row);
         }
+
+        pane.setOnMouseClicked(event -> handleClick(event));
+
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(pane);
@@ -40,6 +56,55 @@ public class TicTacToe extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+
+    private void handleClick(MouseEvent event) {
+        Cell clickedCell = (Cell)event.getTarget();
+        makePlayerMove(clickedCell);
+        checkIfGameIsFinished();
+        changeCurrentPlayer();
+
+//        getComputerTurn();
+    }
+
+    private void checkIfGameIsFinished() {
+        if (hasWon(currentPlayer)) {
+            // todo
+            statusMessage.setText(currentPlayer + " won !");
+        } else if (isBoardFull()) {
+            // todo
+            statusMessage.setText("Draw !");
+        }
+    }
+
+
+    private String getImageUrlForPlayer(char player) {
+        if (player == 'X') {
+            return "file:src/main/resources/cross.png";
+        }
+
+        if(player == 'O') {
+            return "file:src/main/resources/circle.png";
+        }
+
+        return "";
+    }
+
+
+    private void makePlayerMove(Cell clickedCell) {
+        clickedCell.setPlayer(currentPlayer);
+        clickedCell.setImage(getImageUrlForPlayer(currentPlayer));
+    }
+//
+//    public int getComputerTurn() {
+//        boolean isBoardFull = isBoardFull();
+//        for (int i = 1; i <= 9; i++) {
+//            if (!isBoardFull) {
+//                freeFields.add(i);
+//            }
+//        }
+//        return freeFields.get(random.nextInt(freeFields.size()));
+//    }
+//
 
     private int getGameBoardColumnIndex(int cellNumber) {
         return cellNumber % 3;
@@ -105,67 +170,6 @@ public class TicTacToe extends Application {
         return isFirstRowWon || isSecondRowWon || isThirdRowWon;
     }
 
-    public class Cell extends Pane {
-        private char player = ' ' ;
-
-        public Cell() {
-            setStyle("-fx-border-color: black");
-            this.setPrefSize(300,300);
-            this.setOnMouseClicked(event -> handleClick());
-        }
-
-        private void handleClick() {
-            if (player == ' ' && currentPlayer != ' ') {
-                setPlayer(currentPlayer);
-
-                if (hasWon(currentPlayer)) {
-                    statusMessage.setText(currentPlayer + " won !");
-                    currentPlayer = ' ';
-                } else if (isBoardFull()) {
-                    statusMessage.setText("Draw !");
-                    currentPlayer = ' ';
-                } else {
-                    currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
-                    statusMessage.setText(currentPlayer + " must play");
-                    //getComputerTurn();
-                }
-
-            }
-        }
-
-        public int getComputerTurn() {
-            boolean isBoardFull = isBoardFull();
-            for (int i = 1; i <= 9; i++) {
-                if (!isBoardFull) {
-                    freeFields.add(i);
-                }
-            }
-            return freeFields.get(random.nextInt(freeFields.size()));
-        }
-
-        public char getPlayer() {
-            return player;
-        }
-        public void setPlayer(char c) {
-            player =c;
-            if (player == 'X') {
-                /*inny sposób
-                Image cross = new Image("file:src/main/resources/cross.png");
-                ImageView imageView = new ImageView();
-                imageView.setImage(cross);
-                imageView.setPreserveRatio(true);
-                imageView.setFitWidth(145);
-                imageView.setFitHeight(85);
-                getChildren().add(imageView);*/
-                Image cross = new Image("file:src/main/resources/cross.png", 145, 85, false, false);
-                getChildren().add(new ImageView(cross));
-
-            } else if (player == 'O') {
-                Image circle = new Image("file:src/main/resources/circle.png", 145, 85, false, false);
-                getChildren().add(new ImageView(circle));
-            }
-        }
-    }
     /*ewentualnie getComputerTurn w osobnej klasie
     public static class ComputersLogic {
 
