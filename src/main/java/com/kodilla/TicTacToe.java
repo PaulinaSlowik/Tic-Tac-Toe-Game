@@ -16,7 +16,7 @@ public class TicTacToe extends Application {
     private final Cell[] gameBoard = new Cell[9];
     private final Label statusMessage = new Label("X must play");
     private final Random random = new Random();
-    List<Integer> freeFields = new ArrayList<>();
+    List<Integer> freeCells = new ArrayList<>();
 
     public void changeCurrentPlayer() {
         currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
@@ -25,12 +25,16 @@ public class TicTacToe extends Application {
 
     @Override
     public void start (Stage primaryStage) throws Exception {
+
+
+
         GridPane pane = new GridPane(); //do wyświetlenia komórek
         for (int i =0; i<9; i++) { //ustawiam komórki (cell) w pane w ustalonych pozycjach
-                gameBoard[i] = new Cell(i);
-                int column = getGameBoardColumnIndex(i);
-                int row = getGameBoardRowIndex(i);
-                pane.add(gameBoard[i], column, row);
+            freeCells.add(i);
+            gameBoard[i] = new Cell(i);
+            int column = getGameBoardColumnIndex(i);
+            int row = getGameBoardRowIndex(i);
+            pane.add(gameBoard[i], column, row);
         }
 
         pane.setOnMouseClicked(event -> handleClick(event));
@@ -56,8 +60,20 @@ public class TicTacToe extends Application {
         }
 
         changeCurrentPlayer();
+        makeComputerMove();
+    }
 
-//        getComputerTurn();
+    private void makeComputerMove() {
+        int cellNumberToBeMarked = getCellNumberToBeMarked();
+        makePlayerMove(cellNumberToBeMarked);
+        if(checkIfGameIsFinished()) {
+            return;
+        }
+        changeCurrentPlayer();
+    }
+
+    private int getCellNumberToBeMarked() {
+       return freeCells.get(random.nextInt(freeCells.size())) ;
     }
 
     private boolean checkIfGameIsFinished() {
@@ -86,24 +102,11 @@ public class TicTacToe extends Application {
         return "";
     }
 
-    private void makePlayerMove(int clickedCellNumber) {
-        gameBoard[clickedCellNumber].setPlayer(currentPlayer);
-        gameBoard[clickedCellNumber].setImage(getImageUrlForPlayer(currentPlayer));
+    private void makePlayerMove(int cellToBeMarked) {
+        gameBoard[cellToBeMarked].setPlayer(currentPlayer);
+        gameBoard[cellToBeMarked].setImage(getImageUrlForPlayer(currentPlayer));
+        freeCells.remove(new Integer(cellToBeMarked));
     }
-
-
-
-//
-//    public int getComputerTurn() {
-//        boolean isBoardFull = isBoardFull();
-//        for (int i = 1; i <= 9; i++) {
-//            if (!isBoardFull) {
-//                freeFields.add(i);
-//            }
-//        }
-//        return freeFields.get(random.nextInt(freeFields.size()));
-//    }
-//
 
     private int getGameBoardColumnIndex(int cellNumber) {
         return cellNumber % 3;
