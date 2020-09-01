@@ -2,12 +2,9 @@ package com.kodilla;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +17,6 @@ public class TicTacToe extends Application {
     private final Label statusMessage = new Label("X must play");
     private final Random random = new Random();
     List<Integer> freeFields = new ArrayList<>();
-
-    public char getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-//    public char setCurrentPlayer(char player) {
-//        return currentPlayer = player;
-//    }
 
     public void changeCurrentPlayer() {
         currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
@@ -58,22 +47,30 @@ public class TicTacToe extends Application {
     }
 
     private void handleClick(MouseEvent event) {
+        // todo handle cast error
         Cell clickedCell = (Cell)event.getTarget();
-        makePlayerMove(clickedCell);
-        checkIfGameIsFinished();
+        int clickedCellNumber = clickedCell.getCellNumber();
+        makePlayerMove(clickedCellNumber);
+        if(checkIfGameIsFinished()) {
+            return;
+        }
+
         changeCurrentPlayer();
 
 //        getComputerTurn();
     }
 
-    private void checkIfGameIsFinished() {
+    private boolean checkIfGameIsFinished() {
         if (hasWon(currentPlayer)) {
             // todo
             statusMessage.setText(currentPlayer + " won !");
+            return true;
         } else if (isBoardFull()) {
             // todo
             statusMessage.setText("Draw !");
+            return true;
         }
+        return false;
     }
 
 
@@ -89,11 +86,13 @@ public class TicTacToe extends Application {
         return "";
     }
 
-
-    private void makePlayerMove(Cell clickedCell) {
-        clickedCell.setPlayer(currentPlayer);
-        clickedCell.setImage(getImageUrlForPlayer(currentPlayer));
+    private void makePlayerMove(int clickedCellNumber) {
+        gameBoard[clickedCellNumber].setPlayer(currentPlayer);
+        gameBoard[clickedCellNumber].setImage(getImageUrlForPlayer(currentPlayer));
     }
+
+
+
 //
 //    public int getComputerTurn() {
 //        boolean isBoardFull = isBoardFull();
