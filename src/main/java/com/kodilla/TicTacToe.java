@@ -12,12 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-// dupa jas
-
 public class TicTacToe extends Application {
 
     private char currentPlayer = 'X';
-    private final Cell[][] cell = new Cell[3][3];
+    private final Cell[] gameBoard = new Cell[9];
     private final Label statusMessage = new Label("X must play");
     private final Random random = new Random();
     List<Integer> freeFields = new ArrayList<>();
@@ -26,11 +24,11 @@ public class TicTacToe extends Application {
     @Override
     public void start (Stage primaryStage) throws Exception {
         GridPane pane = new GridPane(); //do wyświetlenia komórek
-        for (int i =0; i<3; i++) { //ustawiam komórki (cell) w pane w ustalonych pozycjach
-            for (int j=0; j<3; j++) {
-                cell[i][j] = new Cell();
-                pane.add(cell[i][j],j,i);
-            }
+        for (int i =0; i<9; i++) { //ustawiam komórki (cell) w pane w ustalonych pozycjach
+                gameBoard[i] = new Cell();
+                int column = getGameBoardColumnIndex(i);
+                int row = getGameBoardRowIndex(i);
+                pane.add(gameBoard[i], column, row);
         }
 
         BorderPane borderPane = new BorderPane();
@@ -43,35 +41,68 @@ public class TicTacToe extends Application {
         primaryStage.show();
     }
 
+    private int getGameBoardColumnIndex(int cellNumber) {
+        return cellNumber % 3;
+    }
+
+    private int getGameBoardRowIndex(int cellNumber) {
+        if( cellNumber <= 2) {
+            return 0;
+        }
+        if( cellNumber <= 5) {
+            return 1;
+        }
+        return 2;
+    }
+
     public boolean isBoardFull(){
-        for (int i=0; i<3; i++){
-            for(int j=0; j<3; j++){
-                if (cell[i][j].getPlayer()== ' ') {
+        for (int i=0; i<9; i++){
+                if (gameBoard[i].getPlayer()== ' ') {
                     return false;
                 }
             }
-        }
         return true;
     }
 
     public boolean hasWon(char player) {
+        return isHorizontalWon(player) || isVerticalWon(player) || isObliqueWon(player);
+    }
+
+    private boolean isVerticalWon(char player) {
+        return ((gameBoard[0].getPlayer() == player) && (gameBoard[3].getPlayer() == player) && (gameBoard[6].getPlayer() == player))
+                || ((gameBoard[1].getPlayer() == player) && (gameBoard[4].getPlayer() == player) && (gameBoard[7].getPlayer() == player))
+                || ((gameBoard[2].getPlayer() == player) && (gameBoard[5].getPlayer() == player) && (gameBoard[8].getPlayer() == player));
+    }
+
+    private boolean isObliqueWon(char player) {
+        return ((gameBoard[0].getPlayer() == player) && (gameBoard[4].getPlayer() == player) && (gameBoard[8].getPlayer() == player))
+                || ((gameBoard[2].getPlayer() == player) && (gameBoard[4].getPlayer() == player) && (gameBoard[6].getPlayer() == player));
+    }
+
+
+    private boolean isHorizontalWon(char player) {
+        boolean isFirstRowWon = true;
         for (int i = 0; i < 3; i++) {
-            if (cell[i][0].getPlayer() == player && cell[i][1].getPlayer() == player && cell[i][2].getPlayer() == player) {
-                return true;
+            if (gameBoard[i].getPlayer() != player) {
+                isFirstRowWon = false;
             }
         }
+
+        boolean isSecondRowWon = true;
         for (int i = 0; i < 3; i++) {
-            if (cell[0][i].getPlayer() == player && cell[1][i].getPlayer() == player && cell[2][i].getPlayer() == player) {
-                return true;
+            if (gameBoard[i].getPlayer() != player) {
+                isSecondRowWon = false;
             }
         }
-        if (cell[0][0].getPlayer() == player && cell[1][1].getPlayer() == player && cell[2][2].getPlayer() == player) {
-            return true;
+
+        boolean isThirdRowWon = true;
+        for (int i = 0; i < 3; i++) {
+            if (gameBoard[i].getPlayer() != player) {
+                isThirdRowWon = false;
+            }
         }
-        if (cell[0][2].getPlayer() == player && cell[1][1].getPlayer() == player && cell[2][0].getPlayer() == player) {
-            return true;
-        }
-        return false;
+
+        return isFirstRowWon || isSecondRowWon || isThirdRowWon;
     }
 
     public class Cell extends Pane {
@@ -96,15 +127,16 @@ public class TicTacToe extends Application {
                 } else {
                     currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
                     statusMessage.setText(currentPlayer + " must play");
-                    getComputerTurn();
+                    //getComputerTurn();
                 }
 
             }
         }
 
         public int getComputerTurn() {
+            boolean isBoardFull = isBoardFull();
             for (int i = 1; i <= 9; i++) {
-                if (!isBoardFull()) {
+                if (!isBoardFull) {
                     freeFields.add(i);
                 }
             }
