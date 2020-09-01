@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+// dupa jas
+
 public class TicTacToe extends Application {
 
     private char currentPlayer = 'X';
@@ -94,7 +96,9 @@ public class TicTacToe extends Application {
                 } else {
                     currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
                     statusMessage.setText(currentPlayer + " must play");
+                    getComputerTurn();
                 }
+
             }
         }
 
