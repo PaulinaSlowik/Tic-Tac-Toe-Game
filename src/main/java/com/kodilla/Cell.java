@@ -9,6 +9,7 @@ public class Cell extends Pane {
     private int cellNumber;
 
 
+
     public Cell(int cellNumber) {
         this.cellNumber = cellNumber;
         setStyle("-fx-border-color: black");

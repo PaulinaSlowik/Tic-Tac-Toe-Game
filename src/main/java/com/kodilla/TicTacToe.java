@@ -1,6 +1,8 @@
 package com.kodilla;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -15,34 +17,51 @@ public class TicTacToe extends Application {
     private char currentPlayer = 'X';
     private final Cell[] gameBoard = new Cell[9];
     private final Label statusMessage = new Label("X must play");
+    private final Button newGame = new Button("New game");
     private final Random random = new Random();
     List<Integer> freeCells = new ArrayList<>();
+    GridPane pane = new GridPane(); //do wyświetlenia komórek
+
 
     public void changeCurrentPlayer() {
         currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
         statusMessage.setText(currentPlayer + " must play");
     }
 
-    @Override
-    public void start (Stage primaryStage) throws Exception {
+    private void createNewGame() {
+        TicTacToe game = new TicTacToe();
+        try {
+            game.start(new Stage());
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        //pane.getChildren().remove(0, 8);
+        //prepareGameBoardCells();
+    }
 
-
-
-        GridPane pane = new GridPane(); //do wyświetlenia komórek
-        for (int i =0; i<9; i++) { //ustawiam komórki (cell) w pane w ustalonych pozycjach
+    private void prepareGameBoardCells() {
+        for (int i = 0; i < 9; i++) { //ustawiam komórki (cell) w pane w ustalonych pozycjach
             freeCells.add(i);
             gameBoard[i] = new Cell(i);
             int column = getGameBoardColumnIndex(i);
             int row = getGameBoardRowIndex(i);
             pane.add(gameBoard[i], column, row);
         }
+    }
+
+    @Override
+    public void start (Stage primaryStage) throws Exception {
+
+        prepareGameBoardCells();
 
         pane.setOnMouseClicked(event -> handleClick(event));
+        newGame.setOnAction(event -> buttonNewGameClick(event));
 
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(pane);
         borderPane.setBottom(statusMessage);
+        borderPane.setRight(newGame);
 
         Scene scene = new Scene(borderPane, 450, 300);
         primaryStage.setTitle("Tic Tac Toe Game");
@@ -50,10 +69,20 @@ public class TicTacToe extends Application {
         primaryStage.show();
     }
 
+    private void buttonNewGameClick(ActionEvent event){
+        createNewGame();
+        ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+
+        //createNewGame();
+    }
+
+
+
     private void handleClick(MouseEvent event) {
         // todo handle cast error
         Cell clickedCell = (Cell)event.getTarget();
         int clickedCellNumber = clickedCell.getCellNumber();
+        //clickedCell.setDisable(true);
         makePlayerMove(clickedCellNumber);
         if(checkIfGameIsFinished()) {
             return;
@@ -79,11 +108,13 @@ public class TicTacToe extends Application {
     private boolean checkIfGameIsFinished() {
         if (hasWon(currentPlayer)) {
             // todo
-            statusMessage.setText(currentPlayer + " won !");
+            statusMessage.setText(currentPlayer + " won! Game is finished. Click New Game");
+            pane.setOnMouseClicked(null);
             return true;
-        } else if (isBoardFull()) {
+        } else if ((!hasWon(currentPlayer)) && (isBoardFull())) {
             // todo
-            statusMessage.setText("Draw !");
+            statusMessage.setText("Draw ! Game is finished. Click New Game");
+            pane.setOnMouseClicked(null);
             return true;
         }
         return false;
@@ -148,53 +179,8 @@ public class TicTacToe extends Application {
 
 
     private boolean isHorizontalWon(char player) {
-        boolean isFirstRowWon = true;
-        for (int i = 0; i < 3; i++) {
-            if (gameBoard[i].getPlayer() != player) {
-                isFirstRowWon = false;
-            }
-        }
-
-        boolean isSecondRowWon = true;
-        for (int i = 0; i < 3; i++) {
-            if (gameBoard[i].getPlayer() != player) {
-                isSecondRowWon = false;
-            }
-        }
-
-        boolean isThirdRowWon = true;
-        for (int i = 0; i < 3; i++) {
-            if (gameBoard[i].getPlayer() != player) {
-                isThirdRowWon = false;
-            }
-        }
-
-        return isFirstRowWon || isSecondRowWon || isThirdRowWon;
+        return ((gameBoard[0].getPlayer() == player) && (gameBoard[1].getPlayer() == player) && (gameBoard[2].getPlayer() == player))
+                || ((gameBoard[3].getPlayer() == player) && (gameBoard[4].getPlayer() == player) && (gameBoard[5].getPlayer() == player))
+                || ((gameBoard[6].getPlayer() == player) && (gameBoard[7].getPlayer() == player) && (gameBoard[8].getPlayer() == player));
     }
-
-    /*ewentualnie getComputerTurn w osobnej klasie
-    public static class ComputersLogic {
-
-        private final ApplicationTicTacToe state;
-        private final Random random = new Random();
-
-        public ComputersLogic(ApplicationTicTacToe state) {
-            this.state = state;
-        }
-
-        public int getComputerTurn() {
-            List<Integer> freeFields = new ArrayList<>();
-            for (int i = 1; i <= 9; i++) {
-                if (!state.isBoardFull()) {
-                    freeFields.add(i);
-                }
-            }
-            return freeFields.get(random.nextInt(freeFields.size()));
-        }
-    }*/
-
-    // myślałam aby wrzucić to w this.setOnMouseClicked(event -> handleClick()); a dokłądnie w metodę handleClick,
-    // tzn. jak ktos kliknie myszką w pole to po nacisnieciu przycisku na samym koncu można wywolac metode
-    // a metoda getComputerTurn losuje sobie pole (randamowo w zależności jaką sobie liczbe wylosowal komputer) i tam ustawia znak O
-
 }
