@@ -2,6 +2,7 @@ package com.kodilla;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -31,6 +32,7 @@ public class TicTacToe extends Application {
         borderPane.setBottom(statusMessage);
         borderPane.setRight(newGame);
         prepareGameBoardCells();
+
         borderPane.setCenter(pane);
         pane.setOnMouseClicked(event -> handleClick(event));
         newGame.setOnAction(event -> buttonNewGameClick(event));
@@ -44,11 +46,6 @@ public class TicTacToe extends Application {
 
     public static void main(String[] args) {
         launch(args);
-    }
-
-    private void buttonNewGameClick(ActionEvent event) {
-        createNewGame();
-        ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
     }
 
     private void handleClick(MouseEvent event) {
@@ -65,6 +62,11 @@ public class TicTacToe extends Application {
         statusMessage.setText(player.currentPlayer + " must play");
 
         makeComputerMove();
+    }
+
+    private void buttonNewGameClick(ActionEvent event) {
+        createNewGame();
+        ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
     }
 
     private void createNewGame() {
@@ -84,41 +86,6 @@ public class TicTacToe extends Application {
             int row = getGameBoardRowIndex(i);
             pane.add(win.gameBoard[i], column, row);
         }
-    }
-
-    private void makeComputerMove() {
-        int cellNumberToBeMarked = getCellNumberToBeMarked();
-        makePlayerMove(cellNumberToBeMarked);
-        if (checkIfGameIsFinished()) {
-            return;
-        }
-        player.changeCurrentPlayer();
-        statusMessage.setText(player.currentPlayer + " must play");
-    }
-
-    private int getCellNumberToBeMarked() {
-        return freeCells.get(random.nextInt(freeCells.size()));
-    }
-
-    private boolean checkIfGameIsFinished() {
-        if (win.hasWon(player.currentPlayer)) {
-            // todo
-            statusMessage.setText(player.currentPlayer + " won! Game is finished. Click New Game");
-            pane.setOnMouseClicked(null);
-            return true;
-        } else if ((!win.hasWon(player.currentPlayer)) && (isBoardFull())) {
-            // todo
-            statusMessage.setText("Draw ! Game is finished. Click New Game");
-            pane.setOnMouseClicked(null);
-            return true;
-        }
-        return false;
-    }
-
-    private void makePlayerMove(int cellToBeMarked) {
-        win.gameBoard[cellToBeMarked].setPlayer(player.currentPlayer);
-        win.gameBoard[cellToBeMarked].setImage(player.getImageUrlForPlayer(player.currentPlayer));
-        freeCells.remove(new Integer(cellToBeMarked));
     }
 
     private int getGameBoardColumnIndex(int cellNumber) {
@@ -142,5 +109,40 @@ public class TicTacToe extends Application {
             }
         }
         return true;
+    }
+
+    private boolean checkIfGameIsFinished() {
+        if (win.hasWon(player.currentPlayer)) {
+            // todo
+            statusMessage.setText(player.currentPlayer + " won! Game is finished. Click New Game");
+            pane.setOnMouseClicked(null);
+            return true;
+        } else if ((!win.hasWon(player.currentPlayer)) && (isBoardFull())) {
+            // todo
+            statusMessage.setText("Draw ! Game is finished. Click New Game");
+            pane.setOnMouseClicked(null);
+            return true;
+        }
+        return false;
+    }
+
+    private void makeComputerMove() {
+        int cellNumberToBeMarked = getCellNumberToBeMarked();
+        makePlayerMove(cellNumberToBeMarked);
+        if (checkIfGameIsFinished()) {
+            return;
+        }
+        player.changeCurrentPlayer();
+        statusMessage.setText(player.currentPlayer + " must play");
+    }
+
+    private int getCellNumberToBeMarked() {
+        return freeCells.get(random.nextInt(freeCells.size()));
+    }
+
+    private void makePlayerMove(int cellToBeMarked) {
+        win.gameBoard[cellToBeMarked].setPlayer(player.currentPlayer);
+        win.gameBoard[cellToBeMarked].setImage(player.getImageUrlForPlayer(player.currentPlayer)).setAlignment(Pos.CENTER);
+        freeCells.remove(new Integer(cellToBeMarked));
     }
 }
