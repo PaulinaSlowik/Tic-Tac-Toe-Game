@@ -5,15 +5,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 public class Cell extends Pane {
-    private char player = ' ' ;
+    private char player = ' ';
     private int cellNumber;
-
-
 
     public Cell(int cellNumber) {
         this.cellNumber = cellNumber;
         setStyle("-fx-border-color: black");
-        this.setPrefSize(300,300);
+        this.setPrefSize(300, 300);
     }
 
     public int getCellNumber() {
@@ -23,6 +21,7 @@ public class Cell extends Pane {
     public char getPlayer() {
         return player;
     }
+
     public void setPlayer(char player) {
         this.player = player;
     }
