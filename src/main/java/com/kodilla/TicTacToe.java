@@ -2,13 +2,14 @@ package com.kodilla;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -19,21 +20,24 @@ public class TicTacToe extends Application {
 
     public static Player player = new Player();
     public static Win win = new Win();
-    private final Label statusMessage = new Label("X must play");
+    private final Label statusMessage = new Label("Click on the field. Your move, you have the chance to win! :)");
     private final Button newGame = new Button("New game");
     private final Random random = new Random();
     List<Integer> freeCells = new ArrayList<>();
-    GridPane pane = new GridPane(); //do wyświetlenia komórek
+    GridPane pane = new GridPane();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
 
         BorderPane borderPane = new BorderPane();
         borderPane.setBottom(statusMessage);
+        statusMessage.setStyle("-fx-font-size: 12pt");
         borderPane.setRight(newGame);
+        borderPane.setStyle("-fx-background-color: aliceblue");
         prepareGameBoardCells();
 
         borderPane.setCenter(pane);
+        pane.setStyle("-fx-background-color: skyblue");
         pane.setOnMouseClicked(event -> handleClick(event));
         newGame.setOnAction(event -> buttonNewGameClick(event));
 
@@ -41,6 +45,7 @@ public class TicTacToe extends Application {
 
         primaryStage.setTitle("Tic Tac Toe Game");
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
@@ -49,10 +54,8 @@ public class TicTacToe extends Application {
     }
 
     private void handleClick(MouseEvent event) {
-        // todo handle cast error
         Cell clickedCell = (Cell) event.getTarget();
         int clickedCellNumber = clickedCell.getCellNumber();
-        //clickedCell.setDisable(true);
         makePlayerMove(clickedCellNumber);
         if (checkIfGameIsFinished()) {
             return;
@@ -79,7 +82,7 @@ public class TicTacToe extends Application {
     }
 
     private void prepareGameBoardCells() {
-        for (int i = 0; i < 9; i++) { //ustawiam komórki (cell) w pane w ustalonych pozycjach
+        for (int i = 0; i < 9; i++) {
             freeCells.add(i);
             win.gameBoard[i] = new Cell(i);
             int column = getGameBoardColumnIndex(i);
@@ -113,13 +116,15 @@ public class TicTacToe extends Application {
 
     private boolean checkIfGameIsFinished() {
         if (win.hasWon(player.currentPlayer)) {
-            // todo
-            statusMessage.setText(player.currentPlayer + " won! Game is finished. Click New Game");
+            statusMessage.setText(player.currentPlayer + " won! Game is finished. Click New Game.");
+            newGame.setFont(Font.font(Font.getFontNames().get(0),
+                    FontWeight.EXTRA_BOLD, 15));
             pane.setOnMouseClicked(null);
             return true;
         } else if ((!win.hasWon(player.currentPlayer)) && (isBoardFull())) {
-            // todo
-            statusMessage.setText("Draw ! Game is finished. Click New Game");
+            statusMessage.setText("Draw ! Game is finished. Click New Game.");
+            newGame.setFont(Font.font(Font.getFontNames().get(0),
+                    FontWeight.EXTRA_BOLD, 15));
             pane.setOnMouseClicked(null);
             return true;
         }
@@ -142,7 +147,7 @@ public class TicTacToe extends Application {
 
     private void makePlayerMove(int cellToBeMarked) {
         win.gameBoard[cellToBeMarked].setPlayer(player.currentPlayer);
-        win.gameBoard[cellToBeMarked].setImage(player.getImageUrlForPlayer(player.currentPlayer)).setAlignment(Pos.CENTER);
+        win.gameBoard[cellToBeMarked].setImage(player.getImageUrlForPlayer(player.currentPlayer));
         freeCells.remove(new Integer(cellToBeMarked));
     }
 }

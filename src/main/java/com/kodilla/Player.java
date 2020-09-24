@@ -9,13 +9,12 @@ public class Player {
 
     public String getImageUrlForPlayer(char player) {
         if (player == 'X') {
-            return "file:src/main/resources/cross.png";
+            return "file:src/main/resources/x.png";
         }
 
         if (player == 'O') {
-            return "file:src/main/resources/circle.png";
+            return "file:src/main/resources/o.png";
         }
-
         return "";
     }
 }

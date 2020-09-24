@@ -5,7 +5,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 public class Cell extends Pane {
-    TicTacToe ticTacToe = new TicTacToe();
     private char player = ' ';
     private int cellNumber;
 
@@ -31,12 +30,10 @@ public class Cell extends Pane {
         Image image = new Image(imageUrl);
         ImageView imageView = new ImageView();
         imageView.setImage(image);
-        imageView.setPreserveRatio(true);
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(50);
+        imageView.setTranslateX(10);
+        imageView.setTranslateY(10);
+        imageView.setFitWidth(105);
+        imageView.setFitHeight(75);
         getChildren().add(imageView);
-
-//        Image image = new Image(imageUrl, 100, 50, false, false);
-//        getChildren().add(new ImageView(image));
     }
 }
