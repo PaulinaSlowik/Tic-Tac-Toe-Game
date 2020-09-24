@@ -1,3 +1,4 @@
+Rules in Polish
 Projekt indywidualny
 Gra planszowa- Kółko i krzyżyk (Tic Tac Toe)
 
