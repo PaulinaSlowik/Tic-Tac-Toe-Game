@@ -18,8 +18,8 @@
 7. When all squares are full and no line is formed, the game ends in a draw.
 
 ## Screenshots
-![Example screenshot](src/main/resources/screenshot1.png)
-![Example screenshot](src/main/resources/screenshot2.png)
+![screenshot1](src/main/resources/screenshot1.PNG)
+![screenshot2](src/main/resources/screenshot2.PNG)
 
 ## Technologies
 * Java 8
